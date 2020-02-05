@@ -213,6 +213,8 @@ var activateMap = function () {
 
   selectRooms.addEventListener('change', onRoomNumberChange);
   typeOfHousing.addEventListener('change', onTypeHousingChange);
+  mapPinMain.removeEventListener('mousedown', onPinClick);
+  mapPinMain.removeEventListener('keydown', onPinEnterPress);
 };
 
 var getPinCoordinates = function () {

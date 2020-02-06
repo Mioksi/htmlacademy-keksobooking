@@ -8,6 +8,9 @@ var GUESTS = [0, 1, 2, 3];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var ROOM_VALUE_100 = '100';
+var CAPACITY_VALUE_0 = '0';
+var CAPACITY_VALUE_1 = '1';
 var LEFT_BUTTON_MOUSE = 1;
 var ENTER_KEY = 'Enter';
 
@@ -25,17 +28,23 @@ var PinMain = {
   X: 570,
   Y: 375
 };
-var typesTranslate = {
-  flat: 'Квартира',
-  bungalo: 'Бунгало',
-  house: 'Дом',
-  palace: 'Дворец'
-};
-var housingMinPrices = {
-  bungalo: '0',
-  flat: '1000',
-  house: '5000',
-  palace: '10000'
+var typesOfHousing = {
+  bungalo: {
+    ru: 'Бунгало',
+    minPrice: '0'
+  },
+  flat: {
+    ru: 'Квартира',
+    minPrice: '1000'
+  },
+  house: {
+    ru: 'Дом',
+    minPrice: '5000'
+  },
+  palace: {
+    ru: 'Дворец',
+    minPrice: '10000'
+  }
 };
 var numberOfGuests = {
   1: ['1'],
@@ -48,15 +57,14 @@ var ads = [];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
+var formElements = document.querySelectorAll('.map__filter, fieldset');
+
 var map = document.querySelector('.map');
 var mapPins = map.querySelector('.map__pins');
 var mapPinMain = mapPins.querySelector('.map__pin--main');
 var mapFilters = map.querySelector('.map__filters-container');
-var mapFiltersElements = mapFilters.querySelectorAll('.map__filter');
-var mapFilterFeatures = mapFilters.querySelector('.map__features');
 
 var adForm = document.querySelector('.ad-form');
-var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('input[name=address]');
 var selectRooms = adForm.querySelector('select[name=rooms]');
 var selectCapacity = adForm.querySelector('select[name=capacity]');
@@ -174,7 +182,7 @@ var generateCard = function (card) {
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = typesTranslate[card.offer.type];
+  cardElement.querySelector('.popup__type').textContent = typesOfHousing[card.offer.type].ru;
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
@@ -190,9 +198,9 @@ var renderCard = function (adsAmount) {
   mapFilters.insertAdjacentElement('beforebegin', generateCard(adsAmount));
 };
 
-var toggleDisabledElements = function (elements, boolean) {
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].disabled = boolean;
+var toggleDisabledElements = function () {
+  for (var i = 0; i < formElements.length; i++) {
+    formElements[i].disabled = !formElements[i].disabled;
   }
 };
 
@@ -200,13 +208,10 @@ var activateMap = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
 
-  mapFilterFeatures.disabled = false;
-
   createAdsArray(ADS_AMOUNT);
   renderAllPins(ADS_AMOUNT);
   renderCard(ads[0]);
-  toggleDisabledElements(adFormFieldsets, false);
-  toggleDisabledElements(mapFiltersElements, false);
+  toggleDisabledElements();
   getAddressValue();
   validateRooms();
   validateMinPrice();
@@ -235,17 +240,17 @@ var validateRooms = function () {
     capacityOptions[i].disabled = !numberOfGuests[roomValue].includes(capacityOptions[i].value);
   }
 
-  if (selectRooms.value === '100') {
-    selectCapacity.value = '0';
+  if (selectRooms.value === ROOM_VALUE_100) {
+    selectCapacity.value = CAPACITY_VALUE_0;
   } else {
-    selectCapacity.value = '1';
+    selectCapacity.value = CAPACITY_VALUE_1;
   }
 };
 
 var validateMinPrice = function () {
   var indexSelected = typeOfHousing.selectedIndex;
   var activeTypeOption = typeOptions[indexSelected];
-  var housingMinPrice = housingMinPrices[activeTypeOption.value];
+  var housingMinPrice = typesOfHousing[activeTypeOption.value].minPrice;
 
   priceInput.min = housingMinPrice;
   priceInput.placeholder = housingMinPrice;
@@ -271,11 +276,9 @@ var onPinEnterPress = function (evt) {
   }
 };
 
-mapFilterFeatures.disabled = true;
-selectCapacity.value = '1';
+selectCapacity.value = CAPACITY_VALUE_1;
 
-toggleDisabledElements(adFormFieldsets, true);
-toggleDisabledElements(mapFiltersElements, true);
+toggleDisabledElements();
 getAddressValue();
 
 mapPinMain.addEventListener('mousedown', onPinClick);

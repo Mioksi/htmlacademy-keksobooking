@@ -162,13 +162,13 @@ var generateFeatures = function (features, cardElement) {
 
   popupFeatures.innerHTML = '';
 
-  for (var i = 0; i < features.length; i++) {
+  features.forEach(function (feature) {
     var featureElement = popupFeature.cloneNode(true);
 
-    featureElement.className = 'popup__feature popup__feature--' + features[i];
+    featureElement.className = 'popup__feature popup__feature--' + feature;
 
     popupFeatures.appendChild(featureElement);
-  }
+  });
 };
 
 var generatePhotos = function (photos, cardElement) {
@@ -177,13 +177,13 @@ var generatePhotos = function (photos, cardElement) {
 
   popupPhotos.innerHTML = '';
 
-  for (var i = 0; i < photos.length; i++) {
+  photos.forEach(function (photo) {
     var photoElement = popupPhoto.cloneNode(true);
 
-    photoElement.src = photos[i];
+    photoElement.src = photo;
 
     popupPhotos.appendChild(photoElement);
-  }
+  });
 };
 
 var generateCard = function (card) {
@@ -213,9 +213,9 @@ var renderCard = function (ad) {
 };
 
 var toggleDisabledElements = function () {
-  for (var i = 0; i < formElements.length; i++) {
-    formElements[i].disabled = !formElements[i].disabled;
-  }
+  formElements.forEach(function (formElement) {
+    formElement.disabled = !formElement.disabled;
+  });
 };
 
 var activateMap = function () {
@@ -249,9 +249,9 @@ var getAddressValue = function () {
 var validateRooms = function () {
   var roomValue = selectRooms.value;
 
-  for (var i = 0; i < capacityOptions.length; i++) {
-    capacityOptions[i].disabled = !numberOfGuests[roomValue].includes(capacityOptions[i].value);
-  }
+  capacityOptions.forEach(function (option) {
+    option.disabled = !numberOfGuests[roomValue].includes(option.value);
+  });
 
   if (selectRooms.value === ROOM_VALUE_100) {
     selectCapacity.value = CAPACITY_VALUE_0;

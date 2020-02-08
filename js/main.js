@@ -8,8 +8,6 @@ var GUESTS = [0, 1, 2, 3];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var ROOM_VALUE_100 = '100';
-var CAPACITY_VALUE_0 = '0';
 var CAPACITY_VALUE_1 = '1';
 var LEFT_BUTTON_MOUSE = 1;
 var ENTER_KEY = 'Enter';
@@ -73,6 +71,8 @@ var capacityOptions = selectCapacity.querySelectorAll('option');
 var typeOfHousing = adForm.querySelector('select[name=type]');
 var typeOptions = typeOfHousing.querySelectorAll('option');
 var priceInput = adForm.querySelector('input[name=price]');
+var selectCheckIn = adForm.querySelector('select[name=timein]');
+var selectCheckOut = adForm.querySelector('select[name=timeout]');
 
 var getRandomElement = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -231,6 +231,8 @@ var activateMap = function () {
 
   selectRooms.addEventListener('change', onRoomNumberChange);
   typeOfHousing.addEventListener('change', onTypeHousingChange);
+  selectCheckIn.addEventListener('change', onCheckOutChange);
+  selectCheckOut.addEventListener('change', onCheckInChange);
   mapPinMain.removeEventListener('mousedown', onPinClick);
   mapPinMain.removeEventListener('keydown', onPinEnterPress);
 };
@@ -250,14 +252,9 @@ var validateRooms = function () {
   var roomValue = selectRooms.value;
 
   capacityOptions.forEach(function (option) {
-    option.disabled = !numberOfGuests[roomValue].includes(option.value);
+    option.selected = numberOfGuests[roomValue][0] === option.value;
+    option.disabled = !(numberOfGuests[roomValue].indexOf(option.value) >= 0);
   });
-
-  if (selectRooms.value === ROOM_VALUE_100) {
-    selectCapacity.value = CAPACITY_VALUE_0;
-  } else {
-    selectCapacity.value = CAPACITY_VALUE_1;
-  }
 };
 
 var validateMinPrice = function () {
@@ -275,6 +272,14 @@ var onRoomNumberChange = function () {
 
 var onTypeHousingChange = function () {
   validateMinPrice();
+};
+
+var onCheckInChange = function () {
+  selectCheckIn.value = selectCheckOut.value;
+};
+
+var onCheckOutChange = function () {
+  selectCheckOut.value = selectCheckIn.value;
 };
 
 var onPinClick = function (evt) {

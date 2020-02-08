@@ -13,6 +13,7 @@ var CAPACITY_VALUE_0 = '0';
 var CAPACITY_VALUE_1 = '1';
 var LEFT_BUTTON_MOUSE = 1;
 var ENTER_KEY = 'Enter';
+var ESC_KEY = 'Escape';
 
 var Pin = {
   WIDTH: 50,
@@ -133,6 +134,15 @@ var generatePin = function (ad) {
   adElement.querySelector('img').src = ad.author.avatar;
   adElement.querySelector('img').alt = ad.offer.title;
 
+  adElement.addEventListener('click', function () {
+    onAdOpen(ad);
+  });
+  adElement.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KEY) {
+      onAdOpen(ad);
+    }
+  });
+
   return adElement;
 };
 
@@ -178,6 +188,7 @@ var generatePhotos = function (photos, cardElement) {
 
 var generateCard = function (card) {
   var cardElement = cardTemplate.cloneNode(true);
+  var popupClose = cardElement.querySelector('.popup__close');
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -191,11 +202,14 @@ var generateCard = function (card) {
   generateFeatures(card.offer.features, cardElement);
   generatePhotos(card.offer.photos, cardElement);
 
+  popupClose.addEventListener('click', onCardRemove);
+  document.addEventListener('keydown', onCardEscPress);
+
   return cardElement;
 };
 
-var renderCard = function (adsAmount) {
-  mapFilters.insertAdjacentElement('beforebegin', generateCard(adsAmount));
+var renderCard = function (ad) {
+  mapFilters.insertAdjacentElement('beforebegin', generateCard(ad));
 };
 
 var toggleDisabledElements = function () {
@@ -210,7 +224,6 @@ var activateMap = function () {
 
   createAdsArray(ADS_AMOUNT);
   renderAllPins(ADS_AMOUNT);
-  renderCard(ads[0]);
   toggleDisabledElements();
   getAddressValue();
   validateRooms();
@@ -273,6 +286,30 @@ var onPinClick = function (evt) {
 var onPinEnterPress = function (evt) {
   if (evt.key === ENTER_KEY) {
     activateMap();
+  }
+};
+
+var onCardEscPress = function (evt) {
+  if (evt.key === ESC_KEY) {
+    onCardRemove();
+  }
+};
+
+var onAdOpen = function (ad) {
+  onCardRemove();
+  renderCard(ad);
+};
+
+var onCardRemove = function () {
+  var card = map.querySelector('.map__card');
+
+  if (card) {
+    var popupClose = card.querySelector('.popup__close');
+
+    card.remove();
+
+    popupClose.removeEventListener('click', onCardRemove);
+    document.removeEventListener('keydown', onCardEscPress);
   }
 };
 

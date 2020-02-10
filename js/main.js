@@ -8,7 +8,6 @@ var GUESTS = [0, 1, 2, 3];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var CAPACITY_VALUE_1 = '1';
 var LEFT_BUTTON_MOUSE = 1;
 var ENTER_KEY = 'Enter';
 var ESC_KEY = 'Escape';
@@ -317,8 +316,6 @@ var onCardRemove = function () {
     document.removeEventListener('keydown', onCardEscPress);
   }
 };
-
-selectCapacity.value = CAPACITY_VALUE_1;
 
 toggleDisabledElements();
 getAddressValue();

@@ -8,11 +8,9 @@ var GUESTS = [0, 1, 2, 3];
 var TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-var ROOM_VALUE_100 = '100';
-var CAPACITY_VALUE_0 = '0';
-var CAPACITY_VALUE_1 = '1';
 var LEFT_BUTTON_MOUSE = 1;
 var ENTER_KEY = 'Enter';
+var ESC_KEY = 'Escape';
 
 var Pin = {
   WIDTH: 50,
@@ -72,6 +70,8 @@ var capacityOptions = selectCapacity.querySelectorAll('option');
 var typeOfHousing = adForm.querySelector('select[name=type]');
 var typeOptions = typeOfHousing.querySelectorAll('option');
 var priceInput = adForm.querySelector('input[name=price]');
+var selectCheckIn = adForm.querySelector('select[name=timein]');
+var selectCheckOut = adForm.querySelector('select[name=timeout]');
 
 var getRandomElement = function (array) {
   return array[Math.floor(Math.random() * array.length)];
@@ -133,6 +133,15 @@ var generatePin = function (ad) {
   adElement.querySelector('img').src = ad.author.avatar;
   adElement.querySelector('img').alt = ad.offer.title;
 
+  adElement.addEventListener('click', function () {
+    onAdOpen(ad);
+  });
+  adElement.addEventListener('keydown', function (evt) {
+    if (evt.key === ENTER_KEY) {
+      onAdOpen(ad);
+    }
+  });
+
   return adElement;
 };
 
@@ -152,13 +161,13 @@ var generateFeatures = function (features, cardElement) {
 
   popupFeatures.innerHTML = '';
 
-  for (var i = 0; i < features.length; i++) {
+  features.forEach(function (feature) {
     var featureElement = popupFeature.cloneNode(true);
 
-    featureElement.className = 'popup__feature popup__feature--' + features[i];
+    featureElement.className = 'popup__feature popup__feature--' + feature;
 
     popupFeatures.appendChild(featureElement);
-  }
+  });
 };
 
 var generatePhotos = function (photos, cardElement) {
@@ -167,17 +176,18 @@ var generatePhotos = function (photos, cardElement) {
 
   popupPhotos.innerHTML = '';
 
-  for (var i = 0; i < photos.length; i++) {
+  photos.forEach(function (photo) {
     var photoElement = popupPhoto.cloneNode(true);
 
-    photoElement.src = photos[i];
+    photoElement.src = photo;
 
     popupPhotos.appendChild(photoElement);
-  }
+  });
 };
 
 var generateCard = function (card) {
   var cardElement = cardTemplate.cloneNode(true);
+  var popupClose = cardElement.querySelector('.popup__close');
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -191,17 +201,20 @@ var generateCard = function (card) {
   generateFeatures(card.offer.features, cardElement);
   generatePhotos(card.offer.photos, cardElement);
 
+  popupClose.addEventListener('click', onCardRemove);
+  document.addEventListener('keydown', onCardEscPress);
+
   return cardElement;
 };
 
-var renderCard = function (adsAmount) {
-  mapFilters.insertAdjacentElement('beforebegin', generateCard(adsAmount));
+var renderCard = function (ad) {
+  mapFilters.insertAdjacentElement('beforebegin', generateCard(ad));
 };
 
 var toggleDisabledElements = function () {
-  for (var i = 0; i < formElements.length; i++) {
-    formElements[i].disabled = !formElements[i].disabled;
-  }
+  formElements.forEach(function (formElement) {
+    formElement.disabled = !formElement.disabled;
+  });
 };
 
 var activateMap = function () {
@@ -210,7 +223,6 @@ var activateMap = function () {
 
   createAdsArray(ADS_AMOUNT);
   renderAllPins(ADS_AMOUNT);
-  renderCard(ads[0]);
   toggleDisabledElements();
   getAddressValue();
   validateRooms();
@@ -218,6 +230,8 @@ var activateMap = function () {
 
   selectRooms.addEventListener('change', onRoomNumberChange);
   typeOfHousing.addEventListener('change', onTypeHousingChange);
+  selectCheckIn.addEventListener('change', onCheckOutChange);
+  selectCheckOut.addEventListener('change', onCheckInChange);
   mapPinMain.removeEventListener('mousedown', onPinClick);
   mapPinMain.removeEventListener('keydown', onPinEnterPress);
 };
@@ -236,15 +250,10 @@ var getAddressValue = function () {
 var validateRooms = function () {
   var roomValue = selectRooms.value;
 
-  for (var i = 0; i < capacityOptions.length; i++) {
-    capacityOptions[i].disabled = !numberOfGuests[roomValue].includes(capacityOptions[i].value);
-  }
-
-  if (selectRooms.value === ROOM_VALUE_100) {
-    selectCapacity.value = CAPACITY_VALUE_0;
-  } else {
-    selectCapacity.value = CAPACITY_VALUE_1;
-  }
+  capacityOptions.forEach(function (option) {
+    option.selected = numberOfGuests[roomValue][0] === option.value;
+    option.disabled = !(numberOfGuests[roomValue].indexOf(option.value) >= 0);
+  });
 };
 
 var validateMinPrice = function () {
@@ -264,6 +273,14 @@ var onTypeHousingChange = function () {
   validateMinPrice();
 };
 
+var onCheckInChange = function () {
+  selectCheckIn.value = selectCheckOut.value;
+};
+
+var onCheckOutChange = function () {
+  selectCheckOut.value = selectCheckIn.value;
+};
+
 var onPinClick = function (evt) {
   if (evt.which === LEFT_BUTTON_MOUSE) {
     activateMap();
@@ -276,7 +293,29 @@ var onPinEnterPress = function (evt) {
   }
 };
 
-selectCapacity.value = CAPACITY_VALUE_1;
+var onCardEscPress = function (evt) {
+  if (evt.key === ESC_KEY) {
+    onCardRemove();
+  }
+};
+
+var onAdOpen = function (ad) {
+  onCardRemove();
+  renderCard(ad);
+};
+
+var onCardRemove = function () {
+  var card = map.querySelector('.map__card');
+
+  if (card) {
+    var popupClose = card.querySelector('.popup__close');
+
+    card.remove();
+
+    popupClose.removeEventListener('click', onCardRemove);
+    document.removeEventListener('keydown', onCardEscPress);
+  }
+};
 
 toggleDisabledElements();
 getAddressValue();

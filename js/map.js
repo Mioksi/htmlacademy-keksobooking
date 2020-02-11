@@ -60,6 +60,14 @@
     window.utils.isEscEvent(evt, onCardRemove);
   };
 
+  var removeActivePin = function () {
+    var pins = map.querySelectorAll('.map__pin');
+
+    pins.forEach(function (pin) {
+      pin.classList.remove('map__pin--active');
+    });
+  };
+
   var onCardRemove = function () {
     var card = map.querySelector('.map__card');
 
@@ -71,6 +79,8 @@
       popupClose.removeEventListener('click', onCardRemove);
       document.removeEventListener('keydown', onCardEscPress);
     }
+
+    removeActivePin();
   };
 
   var activateMap = function () {

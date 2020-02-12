@@ -8,7 +8,10 @@
     100: ['0']
   };
 
+  var formElements = document.querySelectorAll('.map__filter, fieldset');
+
   var adForm = document.querySelector('.ad-form');
+  var adFormAddress = adForm.querySelector('input[name=address]');
   var selectRooms = adForm.querySelector('select[name=rooms]');
   var selectCapacity = adForm.querySelector('select[name=capacity]');
   var capacityOptions = selectCapacity.querySelectorAll('option');
@@ -17,6 +20,16 @@
   var priceInput = adForm.querySelector('input[name=price]');
   var selectCheckIn = adForm.querySelector('select[name=timein]');
   var selectCheckOut = adForm.querySelector('select[name=timeout]');
+
+  var toggleDisabledElements = function () {
+    formElements.forEach(function (formElement) {
+      formElement.disabled = !formElement.disabled;
+    });
+  };
+
+  var getAddressValue = function (coords) {
+    adFormAddress.value = coords[0] + ', ' + coords[1];
+  };
 
   var validateRooms = function () {
     var roomValue = selectRooms.value;
@@ -30,7 +43,7 @@
   var validateMinPrice = function () {
     var indexSelected = typeOfHousing.selectedIndex;
     var activeTypeOption = typeOptions[indexSelected];
-    var housingMinPrice = window.card.housingInfo[activeTypeOption.value].minPrice;
+    var housingMinPrice = window.data.housingInfo[activeTypeOption.value].minPrice;
 
     priceInput.min = housingMinPrice;
     priceInput.placeholder = housingMinPrice;
@@ -63,6 +76,8 @@
   };
 
   window.form = {
-    addValidation: addValidation
+    addValidation: addValidation,
+    toggleDisabledElements: toggleDisabledElements,
+    getAddressValue: getAddressValue
   };
 })();

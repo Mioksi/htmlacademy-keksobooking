@@ -15,6 +15,24 @@
     MIN_Y: 130,
     MAX_Y: 630
   };
+  var housingInfo = {
+    bungalo: {
+      ru: 'Бунгало',
+      minPrice: '0'
+    },
+    flat: {
+      ru: 'Квартира',
+      minPrice: '1000'
+    },
+    house: {
+      ru: 'Дом',
+      minPrice: '5000'
+    },
+    palace: {
+      ru: 'Дворец',
+      minPrice: '10000'
+    }
+  };
 
   var getAvatarSrc = function (index) {
     return 'img/avatars/user0' + (index + 1) + '.png';
@@ -53,6 +71,7 @@
   };
 
   window.data = {
-    generateAd: generateAd
+    generateAd: generateAd,
+    housingInfo: housingInfo
   };
 })();

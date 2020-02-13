@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ADS_AMOUNT = 8;
   var LEFT_BUTTON_MOUSE = 1;
 
   var Pin = {
@@ -134,7 +133,7 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.pin.render(ADS_AMOUNT);
+    window.backend.load(window.pin.onSuccess, window.backend.onError);
     window.form.toggleDisabledElements();
     window.form.getAddressValue(getPinCoordinates());
     window.form.addValidation();

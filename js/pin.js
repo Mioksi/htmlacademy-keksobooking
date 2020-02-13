@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var ADS_AMOUNT = 8;
+  var ADS_AMOUNT = 5;
 
   var Pin = {
     WIDTH: 50,
@@ -12,20 +12,6 @@
   var mapPins = map.querySelector('.map__pins');
 
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
-  var createAdsArray = function (adsAmount) {
-    var ads = [];
-
-    for (var i = 0; i < adsAmount; i++) {
-      var ad = window.data.generateAd(i);
-
-      ads.push(ad);
-    }
-
-    return ads;
-  };
-
-  var ads = createAdsArray(ADS_AMOUNT);
 
   var generatePin = function (ad) {
     var adElement = pinTemplate.cloneNode(true);
@@ -47,17 +33,19 @@
     return adElement;
   };
 
-  var renderAllPins = function (adsAmount) {
+  var renderAllPins = function (ads) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < adsAmount; i++) {
-      fragment.appendChild(generatePin(ads[i]));
+    for (var i = 0; i < ADS_AMOUNT; i++) {
+      var ad = window.utils.getRandomElement(ads);
+
+      fragment.appendChild(generatePin(ad));
     }
 
     mapPins.appendChild(fragment);
   };
 
   window.pin = {
-    render: renderAllPins
+    onSuccess: renderAllPins
   };
 })();

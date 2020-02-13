@@ -16,25 +16,29 @@
     }
   };
 
-  var getRandomInteger = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
   var getRandomElement = function (array) {
     return array[Math.floor(Math.random() * array.length)];
   };
 
-  var getRandomLengthArray = function (array) {
-    var randomIndex = Math.floor(Math.random() * array.length + 1);
+  var getDeclension = function (number, nouns) {
+    var n = number % 10;
+    var n2 = number % 100;
 
-    return array.slice(0, randomIndex);
+    if (n === 0 || n2 > 4 && n2 < 20) {
+      return number + ' ' + nouns[2];
+    } else if (n === 1) {
+      return number + ' ' + nouns[0];
+    } else if (n > 1 && n < 5) {
+      return number + ' ' + nouns[1];
+    }
+
+    return number + ' ' + nouns[2];
   };
 
   window.utils = {
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
-    getRandomInteger: getRandomInteger,
     getRandomElement: getRandomElement,
-    getRandomLengthArray: getRandomLengthArray
+    getDeclension: getDeclension
   };
 })();

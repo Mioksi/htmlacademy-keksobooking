@@ -20,8 +20,10 @@
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
+  var mapFilters = map.querySelector('.map__filters');
 
   var adForm = document.querySelector('.ad-form');
+  var formReset = adForm.querySelector('.ad-form__reset');
 
   var getPinCoordinates = function () {
     var coordinateX = parseInt(mapPinMain.style.left, 10);
@@ -31,6 +33,13 @@
     var y = map.classList.contains('map--faded') ? PinMain.Y + Math.floor(PinMain.HEIGHT / 2) : coordinateY + Pin.HEIGHT;
 
     return [x, y];
+  };
+
+  var setDefaultPinMain = function () {
+    mapPinMain.style.left = PinMain.X + 'px';
+    mapPinMain.style.top = PinMain.Y + 'px';
+
+    window.form.getAddressValue(getPinCoordinates());
   };
 
   var onPinClick = function (evt) {
@@ -129,19 +138,43 @@
     }
   };
 
+  var removeAllPins = function () {
+    var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
   var activateMap = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.backend.load(window.pin.onSuccess, window.backend.onError);
+    window.backend.load(window.pin.onSuccess, window.dialog.onError);
     window.form.toggleDisabledElements();
     window.form.getAddressValue(getPinCoordinates());
     window.form.addValidation();
 
     mapPinMain.removeEventListener('keydown', onPinEnterPress);
+    adForm.addEventListener('submit', window.form.onSubmit);
+    formReset.addEventListener('click', deactivateMap);
   };
 
-  window.form.toggleDisabledElements();
+  var deactivateMap = function () {
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
+
+    window.form.toggleDisabledElements();
+    adForm.reset();
+    mapFilters.reset();
+    setDefaultPinMain();
+    removeAllPins();
+    onCardRemove();
+
+    adForm.removeEventListener('submit', window.form.onSubmit);
+    formReset.removeEventListener('click', deactivateMap);
+  };
+
   window.form.getAddressValue(getPinCoordinates());
 
   mapPinMain.addEventListener('mousedown', onPinClick);
@@ -150,6 +183,7 @@
   window.map = {
     onAdOpen: onAdOpen,
     onCardRemove: onCardRemove,
-    onCardEscPress: onCardEscPress
+    onCardEscPress: onCardEscPress,
+    deactivateMap: deactivateMap
   };
 })();

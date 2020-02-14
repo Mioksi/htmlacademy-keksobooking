@@ -2,6 +2,7 @@
 
 (function () {
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
+  var URL_SAVE = 'https://js.dump.academy/keksobooking';
   var TIMEOUT_IN_MS = 10000;
 
   var StatusCode = {
@@ -52,17 +53,15 @@
     xhr.send();
   };
 
-  var onError = function (errorMessage) {
-    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var erroElement = errorTemplate.cloneNode(true);
+  var save = function (data, onLoad, onError) {
+    var xhr = setupLoad(onLoad, onError);
 
-    erroElement.querySelector('.error__message').textContent = errorMessage;
-
-    document.body.insertAdjacentElement('afterbegin', erroElement);
+    xhr.open('POST', URL_SAVE);
+    xhr.send(data);
   };
 
   window.backend = {
     load: load,
-    onError: onError
+    save: save
   };
 })();

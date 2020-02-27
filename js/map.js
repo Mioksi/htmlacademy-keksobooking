@@ -24,6 +24,8 @@
 
   var adForm = document.querySelector('.ad-form');
   var formReset = adForm.querySelector('.ad-form__reset');
+  var avatarChooser = adForm.querySelector('.ad-form-header__input');
+  var pictureChooser = adForm.querySelector('.ad-form__input');
 
   var getPinCoordinates = function () {
     var coordinateX = parseInt(mapPinMain.style.left, 10);
@@ -171,6 +173,8 @@
     window.form.addValidation();
 
     mapPinMain.removeEventListener('keydown', onPinEnterPress);
+    avatarChooser.addEventListener('change', window.upload.onAvatarLoad);
+    pictureChooser.addEventListener('change', window.upload.onPictureLoad);
     adForm.addEventListener('submit', window.form.onSubmit);
     formReset.addEventListener('click', deactivateMap);
   };
@@ -185,7 +189,10 @@
     setDefaultPinMain();
     removeAllPins();
     onCardRemove();
+    window.upload.resetPictures();
 
+    avatarChooser.removeEventListener('change', window.upload.onAvatarLoad);
+    pictureChooser.removeEventListener('change', window.upload.onPictureLoad);
     adForm.removeEventListener('submit', window.form.onSubmit);
     formReset.removeEventListener('click', deactivateMap);
   };

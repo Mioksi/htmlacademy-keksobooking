@@ -17,6 +17,8 @@
     Y: 375
   };
 
+  var ads = [];
+
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
@@ -148,19 +150,19 @@
     });
   };
 
-  var onFilterFormChange = window.debounce(function (data) {
+  var onFilterChange = window.debounce(function () {
     removeAllPins();
     onCardRemove();
 
-    window.pin.render(data);
+    window.pin.render(ads);
   });
 
   var onSuccess = function (data) {
+    ads = data;
+
     window.pin.render(data);
 
-    mapFilters.addEventListener('change', function () {
-      onFilterFormChange(data);
-    });
+    mapFilters.addEventListener('change', onFilterChange);
   };
 
   var activateMap = function () {
@@ -189,8 +191,10 @@
     setDefaultPinMain();
     removeAllPins();
     onCardRemove();
+    window.form.removeValidation();
     window.upload.resetPictures();
 
+    mapFilters.removeEventListener('change', onFilterChange);
     avatarChooser.removeEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.removeEventListener('change', window.upload.onPictureLoad);
     adForm.removeEventListener('submit', window.form.onSubmit);

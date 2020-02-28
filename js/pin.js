@@ -38,7 +38,9 @@
     var filteredAds = window.filter(ads).slice(0, ADS_AMOUNT);
 
     filteredAds.forEach(function (ad) {
-      fragment.appendChild(generatePin(ad));
+      if (ad.offer) {
+        fragment.appendChild(generatePin(ad));
+      }
     });
 
     mapPins.appendChild(fragment);

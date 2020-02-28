@@ -86,8 +86,6 @@
     evt.preventDefault();
 
     window.backend.save(new FormData(adForm), window.dialog.onSuccess, window.dialog.onError);
-
-    window.map.deactivateMap();
   };
 
   toggleDisabledElements();

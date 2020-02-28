@@ -160,25 +160,24 @@
   var onSuccess = function (data) {
     ads = data;
 
-    window.pin.render(data);
-
-    mapFilters.addEventListener('change', onFilterChange);
-  };
-
-  var activateMap = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.backend.load(onSuccess, window.dialog.onError);
+    window.pin.render(data);
     window.form.toggleDisabledElements();
     window.form.getAddressValue(getPinCoordinates());
     window.form.addValidation();
 
-    mapPinMain.removeEventListener('keydown', onPinEnterPress);
+    mapFilters.addEventListener('change', onFilterChange);
     avatarChooser.addEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.addEventListener('change', window.upload.onPictureLoad);
     adForm.addEventListener('submit', window.form.onSubmit);
     formReset.addEventListener('click', deactivateMap);
+    mapPinMain.removeEventListener('keydown', onPinEnterPress);
+  };
+
+  var activateMap = function () {
+    window.backend.load(onSuccess, window.dialog.onError);
   };
 
   var deactivateMap = function () {

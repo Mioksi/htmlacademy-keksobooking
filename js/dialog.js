@@ -10,7 +10,7 @@
     var removeDialog = function () {
       successElement.remove();
 
-      successElement.addEventListener('click', onDialogClick);
+      successElement.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
@@ -24,7 +24,7 @@
       window.utils.isEscEvent(evt, removeDialog);
     };
 
-    window.map.deactivateMap();
+    window.map.onMapDeactivate();
 
     successElement.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
@@ -39,12 +39,12 @@
     var removeDialog = function () {
       errorElement.remove();
 
-      errorElement.addEventListener('click', onDialogButtonClick);
+      errorElement.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
-    var onDialogButtonClick = function (evt) {
-      if (evt.target.classList.contains('error__button')) {
+    var onDialogClick = function (evt) {
+      if (!evt.target.classList.contains('error__message')) {
         removeDialog();
       }
     };
@@ -55,7 +55,7 @@
 
     errorElement.querySelector('.error__message').textContent = errorMessage;
 
-    errorElement.addEventListener('click', onDialogButtonClick);
+    errorElement.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
 
     main.insertAdjacentElement('afterbegin', errorElement);

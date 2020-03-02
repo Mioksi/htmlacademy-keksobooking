@@ -5,12 +5,12 @@
 
   var onSuccess = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
-    var successElement = successTemplate.cloneNode(true);
+    var success = successTemplate.cloneNode(true);
 
     var removeDialog = function () {
-      successElement.remove();
+      success.remove();
 
-      successElement.removeEventListener('click', onDialogClick);
+      success.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
@@ -24,22 +24,22 @@
       window.utils.isEscEvent(evt, removeDialog);
     };
 
-    window.map.onMapDeactivate();
+    window.map.onDeactivate();
 
-    successElement.addEventListener('click', onDialogClick);
+    success.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
 
-    main.insertAdjacentElement('afterbegin', successElement);
+    main.insertAdjacentElement('afterbegin', success);
   };
 
   var onError = function (errorMessage) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var errorElement = errorTemplate.cloneNode(true);
+    var error = errorTemplate.cloneNode(true);
 
     var removeDialog = function () {
-      errorElement.remove();
+      error.remove();
 
-      errorElement.removeEventListener('click', onDialogClick);
+      error.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
@@ -53,12 +53,12 @@
       window.utils.isEscEvent(evt, removeDialog);
     };
 
-    errorElement.querySelector('.error__message').textContent = errorMessage;
+    error.querySelector('.error__message').textContent = errorMessage;
 
-    errorElement.addEventListener('click', onDialogClick);
+    error.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
 
-    main.insertAdjacentElement('afterbegin', errorElement);
+    main.insertAdjacentElement('afterbegin', error);
   };
 
   window.dialog = {

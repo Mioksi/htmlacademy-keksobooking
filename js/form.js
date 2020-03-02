@@ -8,7 +8,7 @@
     100: ['0']
   };
 
-  var formElements = document.querySelectorAll('.map__filter, fieldset');
+  var formFields = document.querySelectorAll('.map__filter, fieldset');
 
   var adForm = document.querySelector('.ad-form');
   var adFormAddress = adForm.querySelector('input[name=address]');
@@ -22,8 +22,8 @@
   var selectCheckOut = adForm.querySelector('select[name=timeout]');
 
   var toggleDisabledElements = function () {
-    formElements.forEach(function (formElement) {
-      formElement.disabled = !formElement.disabled;
+    formFields.forEach(function (formField) {
+      formField.disabled = !formField.disabled;
     });
   };
 

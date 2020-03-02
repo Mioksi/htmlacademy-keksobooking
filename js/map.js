@@ -172,7 +172,7 @@
     avatarChooser.addEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.addEventListener('change', window.upload.onPictureLoad);
     adForm.addEventListener('submit', window.form.onSubmit);
-    formReset.addEventListener('click', onMapDeactivate);
+    formReset.addEventListener('click', onDeactivate);
     mapPinMain.removeEventListener('keydown', onPinEnterPress);
   };
 
@@ -180,7 +180,7 @@
     window.backend.load(onSuccess, window.dialog.onError);
   };
 
-  var onMapDeactivate = function () {
+  var onDeactivate = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
 
@@ -197,7 +197,7 @@
     avatarChooser.removeEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.removeEventListener('change', window.upload.onPictureLoad);
     adForm.removeEventListener('submit', window.form.onSubmit);
-    formReset.removeEventListener('click', onMapDeactivate);
+    formReset.removeEventListener('click', onDeactivate);
   };
 
   window.form.getAddressValue(getPinCoordinates());
@@ -209,6 +209,6 @@
     onAdOpen: onAdOpen,
     onCardRemove: onCardRemove,
     onCardEscPress: onCardEscPress,
-    onMapDeactivate: onMapDeactivate
+    onDeactivate: onDeactivate
   };
 })();

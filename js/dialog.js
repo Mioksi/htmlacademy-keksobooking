@@ -5,12 +5,12 @@
 
   var onSuccess = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
-    var successElement = successTemplate.cloneNode(true);
+    var success = successTemplate.cloneNode(true);
 
     var removeDialog = function () {
-      successElement.remove();
+      success.remove();
 
-      successElement.addEventListener('click', onDialogClick);
+      success.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
@@ -24,25 +24,27 @@
       window.utils.isEscEvent(evt, removeDialog);
     };
 
-    successElement.addEventListener('click', onDialogClick);
+    window.map.onDeactivate();
+
+    success.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
 
-    main.insertAdjacentElement('afterbegin', successElement);
+    main.insertAdjacentElement('afterbegin', success);
   };
 
   var onError = function (errorMessage) {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var errorElement = errorTemplate.cloneNode(true);
+    var error = errorTemplate.cloneNode(true);
 
     var removeDialog = function () {
-      errorElement.remove();
+      error.remove();
 
-      errorElement.addEventListener('click', onDialogButtonClick);
+      error.removeEventListener('click', onDialogClick);
       document.removeEventListener('keydown', onDialogEscPress);
     };
 
-    var onDialogButtonClick = function (evt) {
-      if (evt.target.classList.contains('error__button')) {
+    var onDialogClick = function (evt) {
+      if (!evt.target.classList.contains('error__message')) {
         removeDialog();
       }
     };
@@ -51,12 +53,12 @@
       window.utils.isEscEvent(evt, removeDialog);
     };
 
-    errorElement.querySelector('.error__message').textContent = errorMessage;
+    error.querySelector('.error__message').textContent = errorMessage;
 
-    errorElement.addEventListener('click', onDialogButtonClick);
+    error.addEventListener('click', onDialogClick);
     document.addEventListener('keydown', onDialogEscPress);
 
-    main.insertAdjacentElement('afterbegin', errorElement);
+    main.insertAdjacentElement('afterbegin', error);
   };
 
   window.dialog = {

@@ -16,10 +16,6 @@
     }
   };
 
-  var getRandomElement = function (array) {
-    return array[Math.floor(Math.random() * array.length)];
-  };
-
   var getDeclension = function (number, nouns) {
     var n = number % 10;
     var n2 = number % 100;
@@ -38,7 +34,6 @@
   window.utils = {
     isEscEvent: isEscEvent,
     isEnterEvent: isEnterEvent,
-    getRandomElement: getRandomElement,
     getDeclension: getDeclension
   };
 })();

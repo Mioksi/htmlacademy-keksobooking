@@ -17,6 +17,8 @@
     Y: 375
   };
 
+  var ads = [];
+
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
   var mapPinMain = mapPins.querySelector('.map__pin--main');
@@ -148,38 +150,37 @@
     });
   };
 
-  var onFilterFormChange = window.debounce(function (data) {
+  var onFilterChange = window.debounce(function () {
     removeAllPins();
     onCardRemove();
 
-    window.pin.render(data);
+    window.pin.render(ads);
   });
 
   var onSuccess = function (data) {
-    window.pin.render(data);
+    ads = data;
 
-    mapFilters.addEventListener('change', function () {
-      onFilterFormChange(data);
-    });
-  };
-
-  var activateMap = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    window.backend.load(onSuccess, window.dialog.onError);
+    window.pin.render(data);
     window.form.toggleDisabledElements();
     window.form.getAddressValue(getPinCoordinates());
     window.form.addValidation();
 
-    mapPinMain.removeEventListener('keydown', onPinEnterPress);
+    mapFilters.addEventListener('change', onFilterChange);
     avatarChooser.addEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.addEventListener('change', window.upload.onPictureLoad);
     adForm.addEventListener('submit', window.form.onSubmit);
-    formReset.addEventListener('click', deactivateMap);
+    formReset.addEventListener('click', onDeactivate);
+    mapPinMain.removeEventListener('keydown', onPinEnterPress);
   };
 
-  var deactivateMap = function () {
+  var activateMap = function () {
+    window.backend.load(onSuccess, window.dialog.onError);
+  };
+
+  var onDeactivate = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
 
@@ -189,12 +190,14 @@
     setDefaultPinMain();
     removeAllPins();
     onCardRemove();
+    window.form.removeValidation();
     window.upload.resetPictures();
 
+    mapFilters.removeEventListener('change', onFilterChange);
     avatarChooser.removeEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.removeEventListener('change', window.upload.onPictureLoad);
     adForm.removeEventListener('submit', window.form.onSubmit);
-    formReset.removeEventListener('click', deactivateMap);
+    formReset.removeEventListener('click', onDeactivate);
   };
 
   window.form.getAddressValue(getPinCoordinates());
@@ -206,6 +209,6 @@
     onAdOpen: onAdOpen,
     onCardRemove: onCardRemove,
     onCardEscPress: onCardEscPress,
-    deactivateMap: deactivateMap
+    onDeactivate: onDeactivate
   };
 })();

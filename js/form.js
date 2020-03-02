@@ -10,16 +10,15 @@
 
   var formFields = document.querySelectorAll('.map__filter, fieldset');
 
-  var adForm = document.querySelector('.ad-form');
-  var adFormAddress = adForm.querySelector('input[name=address]');
-  var selectRooms = adForm.querySelector('select[name=rooms]');
-  var selectCapacity = adForm.querySelector('select[name=capacity]');
+  var adFormAddress = window.data.adForm.querySelector('input[name=address]');
+  var selectRooms = window.data.adForm.querySelector('select[name=rooms]');
+  var selectCapacity = window.data.adForm.querySelector('select[name=capacity]');
   var capacityOptions = selectCapacity.querySelectorAll('option');
-  var typeOfHousing = adForm.querySelector('select[name=type]');
+  var typeOfHousing = window.data.adForm.querySelector('select[name=type]');
   var typeOptions = typeOfHousing.querySelectorAll('option');
-  var priceInput = adForm.querySelector('input[name=price]');
-  var selectCheckIn = adForm.querySelector('select[name=timein]');
-  var selectCheckOut = adForm.querySelector('select[name=timeout]');
+  var priceInput = window.data.adForm.querySelector('input[name=price]');
+  var selectCheckIn = window.data.adForm.querySelector('select[name=timein]');
+  var selectCheckOut = window.data.adForm.querySelector('select[name=timeout]');
 
   var toggleDisabledElements = function () {
     formFields.forEach(function (formField) {
@@ -85,7 +84,7 @@
   var onFormSubmit = function (evt) {
     evt.preventDefault();
 
-    window.backend.save(new FormData(adForm), window.dialog.onSuccess, window.dialog.onError);
+    window.backend.save(new FormData(window.data.adForm), window.dialog.onSuccess, window.dialog.onError);
   };
 
   toggleDisabledElements();

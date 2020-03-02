@@ -4,10 +4,9 @@
   var FILE_TYPES = ['jpg', 'jpeg', 'png'];
   var PICTURE_SIZE = 70;
 
-  var adForm = document.querySelector('.ad-form');
-  var pinAvatar = adForm.querySelector('.ad-form-header__preview img');
+  var pinAvatar = window.data.adForm.querySelector('.ad-form-header__preview img');
 
-  var housingPicture = adForm.querySelector('.ad-form__photo');
+  var housingPicture = window.data.adForm.querySelector('.ad-form__photo');
 
   var loadPicture = function (evt, picture) {
     var file = evt.target.files[0];

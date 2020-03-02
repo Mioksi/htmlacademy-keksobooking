@@ -19,22 +19,18 @@
 
   var ads = [];
 
-  var map = document.querySelector('.map');
-  var mapPins = map.querySelector('.map__pins');
-  var mapPinMain = mapPins.querySelector('.map__pin--main');
-  var mapFilters = map.querySelector('.map__filters');
+  var mapPinMain = window.data.mapPins.querySelector('.map__pin--main');
 
-  var adForm = document.querySelector('.ad-form');
-  var formReset = adForm.querySelector('.ad-form__reset');
-  var avatarChooser = adForm.querySelector('.ad-form-header__input');
-  var pictureChooser = adForm.querySelector('.ad-form__input');
+  var formReset = window.data.adForm.querySelector('.ad-form__reset');
+  var avatarChooser = window.data.adForm.querySelector('.ad-form-header__input');
+  var pictureChooser = window.data.adForm.querySelector('.ad-form__input');
 
   var getPinCoordinates = function () {
     var coordinateX = parseInt(mapPinMain.style.left, 10);
     var coordinateY = parseInt(mapPinMain.style.top, 10);
 
-    var x = map.classList.contains('map--faded') ? PinMain.X + Math.floor(PinMain.WIDTH / 2) : coordinateX + Math.floor(Pin.WIDTH / 2);
-    var y = map.classList.contains('map--faded') ? PinMain.Y + Math.floor(PinMain.HEIGHT / 2) : coordinateY + Pin.HEIGHT;
+    var x = window.data.map.classList.contains('map--faded') ? PinMain.X + Math.floor(PinMain.WIDTH / 2) : coordinateX + Math.floor(Pin.WIDTH / 2);
+    var y = window.data.map.classList.contains('map--faded') ? PinMain.Y + Math.floor(PinMain.HEIGHT / 2) : coordinateY + Pin.HEIGHT;
 
     return [x, y];
   };
@@ -50,7 +46,7 @@
     evt.preventDefault();
 
     if (evt.which === LEFT_BUTTON_MOUSE) {
-      if (map.classList.contains('map--faded')) {
+      if (window.data.map.classList.contains('map--faded')) {
         activateMap();
       }
 
@@ -63,7 +59,7 @@
         moveEvt.preventDefault();
 
         var minCoordsX = Pin.MIN_X - PinMain.WIDTH / 2;
-        var maxCoordsX = map.offsetWidth - PinMain.WIDTH / 2;
+        var maxCoordsX = window.data.map.offsetWidth - PinMain.WIDTH / 2;
         var minCoordsY = Pin.MIN_Y - Pin.HEIGHT;
         var maxCoordsY = Pin.MAX_Y - Pin.HEIGHT;
 
@@ -121,7 +117,7 @@
   };
 
   var removeActivePin = function () {
-    var pinActive = mapPins.querySelector('.map__pin--active');
+    var pinActive = window.data.mapPins.querySelector('.map__pin--active');
 
     if (pinActive) {
       pinActive.classList.remove('map__pin--active');
@@ -129,7 +125,7 @@
   };
 
   var onCardRemove = function () {
-    var card = map.querySelector('.map__card');
+    var card = window.data.map.querySelector('.map__card');
 
     if (card) {
       var popupClose = card.querySelector('.popup__close');
@@ -143,7 +139,7 @@
   };
 
   var removeAllPins = function () {
-    var pins = map.querySelectorAll('.map__pin:not(.map__pin--main)');
+    var pins = window.data.map.querySelectorAll('.map__pin:not(.map__pin--main)');
 
     pins.forEach(function (pin) {
       pin.remove();
@@ -160,18 +156,18 @@
   var onSuccess = function (data) {
     ads = data;
 
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+    window.data.map.classList.remove('map--faded');
+    window.data.adForm.classList.remove('ad-form--disabled');
 
     window.pin.render(data);
     window.form.toggleDisabledElements();
     window.form.getAddressValue(getPinCoordinates());
     window.form.addValidation();
 
-    mapFilters.addEventListener('change', onFilterChange);
+    window.data.mapFilters.addEventListener('change', onFilterChange);
     avatarChooser.addEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.addEventListener('change', window.upload.onPictureLoad);
-    adForm.addEventListener('submit', window.form.onSubmit);
+    window.data.adForm.addEventListener('submit', window.form.onSubmit);
     formReset.addEventListener('click', onDeactivate);
     mapPinMain.removeEventListener('keydown', onPinEnterPress);
   };
@@ -181,22 +177,22 @@
   };
 
   var onDeactivate = function () {
-    map.classList.add('map--faded');
-    adForm.classList.add('ad-form--disabled');
+    window.data.map.classList.add('map--faded');
+    window.data.adForm.classList.add('ad-form--disabled');
 
     window.form.toggleDisabledElements();
-    adForm.reset();
-    mapFilters.reset();
+    window.data.adForm.reset();
+    window.data.mapFilters.reset();
     setDefaultPinMain();
     removeAllPins();
     onCardRemove();
     window.form.removeValidation();
     window.upload.resetPictures();
 
-    mapFilters.removeEventListener('change', onFilterChange);
+    window.data.mapFilters.removeEventListener('change', onFilterChange);
     avatarChooser.removeEventListener('change', window.upload.onAvatarLoad);
     pictureChooser.removeEventListener('change', window.upload.onPictureLoad);
-    adForm.removeEventListener('submit', window.form.onSubmit);
+    window.data.adForm.removeEventListener('submit', window.form.onSubmit);
     formReset.removeEventListener('click', onDeactivate);
   };
 

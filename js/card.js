@@ -4,8 +4,7 @@
   var roomsDeclension = ['комната', 'комнаты', 'комнат'];
   var guestsDeclension = ['гостя', 'гостей', 'гостей'];
 
-  var map = document.querySelector('.map');
-  var mapFilters = map.querySelector('.map__filters-container');
+  var mapFiltersContainer = window.data.map.querySelector('.map__filters-container');
 
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
@@ -117,7 +116,7 @@
   };
 
   var renderCard = function (ad) {
-    mapFilters.insertAdjacentElement('beforebegin', generateCard(ad));
+    mapFiltersContainer.insertAdjacentElement('beforebegin', generateCard(ad));
   };
 
   window.card = {

@@ -16,10 +16,11 @@
     }
   };
 
-  var housingType = window.data.mapFilters.querySelector('#housing-type');
-  var housingPrice = window.data.mapFilters.querySelector('#housing-price');
-  var housingRooms = window.data.mapFilters.querySelector('#housing-rooms');
-  var housingGuests = window.data.mapFilters.querySelector('#housing-guests');
+  var mapFilters = window.data.mapFilters;
+  var housingType = mapFilters.querySelector('#housing-type');
+  var housingPrice = mapFilters.querySelector('#housing-price');
+  var housingRooms = mapFilters.querySelector('#housing-rooms');
+  var housingGuests = mapFilters.querySelector('#housing-guests');
 
   var filterHousing = function (dataElement, filterElement) {
     return filterElement.value === 'any' ? true : dataElement.toString() === filterElement.value;
@@ -30,7 +31,7 @@
   };
 
   var filterHousingFeatures = function (dataElement) {
-    var housingFeatures = window.data.mapFilters.querySelectorAll('.map__checkbox:checked');
+    var housingFeatures = mapFilters.querySelectorAll('.map__checkbox:checked');
 
     return Array.from(housingFeatures).every(function (feature) {
       return dataElement.indexOf(feature.value) >= 0;

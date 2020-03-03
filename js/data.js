@@ -20,7 +20,17 @@
     }
   };
 
+  var map = document.querySelector('.map');
+  var mapFilters = map.querySelector('.map__filters');
+  var mapPins = map.querySelector('.map__pins');
+
+  var adForm = document.querySelector('.ad-form');
+
   window.data = {
-    housingInfo: housingInfo
+    housingInfo: housingInfo,
+    map: map,
+    mapFilters: mapFilters,
+    mapPins: mapPins,
+    adForm: adForm
   };
 })();

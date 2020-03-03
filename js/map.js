@@ -19,12 +19,12 @@
 
   var ads = [];
 
-  var map = document.querySelector('.map');
-  var mapPins = map.querySelector('.map__pins');
+  var map = window.data.map;
+  var mapPins = window.data.mapPins;
   var mapPinMain = mapPins.querySelector('.map__pin--main');
-  var mapFilters = map.querySelector('.map__filters');
+  var mapFilters = window.data.mapFilters;
 
-  var adForm = document.querySelector('.ad-form');
+  var adForm = window.data.adForm;
   var formReset = adForm.querySelector('.ad-form__reset');
   var avatarChooser = adForm.querySelector('.ad-form-header__input');
   var pictureChooser = adForm.querySelector('.ad-form__input');

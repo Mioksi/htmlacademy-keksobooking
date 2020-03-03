@@ -10,7 +10,7 @@
 
   var formFields = document.querySelectorAll('.map__filter, fieldset');
 
-  var adForm = document.querySelector('.ad-form');
+  var adForm = window.data.adForm;
   var adFormAddress = adForm.querySelector('input[name=address]');
   var selectRooms = adForm.querySelector('select[name=rooms]');
   var selectCapacity = adForm.querySelector('select[name=capacity]');

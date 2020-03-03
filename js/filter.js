@@ -16,7 +16,7 @@
     }
   };
 
-  var mapFilters = document.querySelector('.map__filters');
+  var mapFilters = window.data.mapFilters;
   var housingType = mapFilters.querySelector('#housing-type');
   var housingPrice = mapFilters.querySelector('#housing-price');
   var housingRooms = mapFilters.querySelector('#housing-rooms');
